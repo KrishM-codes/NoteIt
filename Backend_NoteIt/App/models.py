@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.conf import settings
 
 # Custom User Manager
 class UserManager(BaseUserManager):
@@ -40,3 +41,27 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Note(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notes')
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    is_file = models.BooleanField(default=False)
+    file_url = models.URLField(max_length=500, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
