@@ -102,3 +102,26 @@ class NoteDetailView(generics.RetrieveUpdateDestroyAPIView):
             cloudinary.uploader.destroy(public_id, resource_type="raw")
 
         instance.delete()
+
+
+class DashboardView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        user_notes = Note.objects.filter(user=user)
+
+        note_count = user_notes.count()
+
+        category_count = user_notes.exclude(category__isnull=True).values('category').distinct().count()
+
+        recent_notes = user_notes.order_by('-updated_at')[:3]
+        recent_notes_serialized = NoteSerializer(recent_notes, many=True).data
+
+        return Response({
+            'note_count': note_count,
+            'category_count': category_count,
+            'recent_notes': recent_notes_serialized
+        })
