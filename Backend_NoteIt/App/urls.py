@@ -11,4 +11,6 @@ urlpatterns = [
     path('register/', views.RegisterUser.as_view(), name='register_user'),
     path('notes/', NoteListCreateView.as_view(), name='note-list-create'),
     path('notes/<int:pk>/', NoteDetailView.as_view(), name='note-detail'),
+    path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
+
 ]
