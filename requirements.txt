@@ -3,3 +3,6 @@ psycopg2-binary
 python-dotenv
 djangorestframework
 djangorestframework_simplejwt
+cloudinary 
+django-cloudinary-storage
+django-cors-headers

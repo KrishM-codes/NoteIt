@@ -1,5 +1,4 @@
-/env
-/Backend_NoteIt/.env
-/Backend_NoteIt/App/__pycache__
-/Backend_NoteIt/Backend_NoteIt/__pycache__
-/Frontend_NoteIt/src/.env
+**/env
+**.env
+Backend_NoteIt/Backend_NoteIt/__pycache__
+Backend_NoteIt/App/__pycache__
