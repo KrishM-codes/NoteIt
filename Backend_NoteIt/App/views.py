@@ -11,7 +11,7 @@ from rest_framework import status
 from .serializers import UserRegistrationSerializer
 
 from rest_framework import generics, permissions
-from .models import Note
+from .models import Note,Category
 from .serializers import NoteSerializer
 import cloudinary.uploader
 
@@ -125,3 +125,23 @@ class DashboardView(APIView):
             'category_count': category_count,
             'recent_notes': recent_notes_serialized
         })
+
+
+class UserCategoriesView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        categories = Category.objects.filter(note__user=user).distinct()
+
+        data = []
+        for category in categories:
+            note_count = Note.objects.filter(user=user, category=category).count()
+            data.append({
+                'id': category.id,
+                'name': category.name,
+                'note_count': note_count
+            })
+
+        return Response(data)
